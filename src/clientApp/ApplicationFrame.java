@@ -2,8 +2,6 @@ package clientApp;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class ApplicationFrame {
@@ -12,7 +10,7 @@ public class ApplicationFrame {
     private JTextField sendTextField;
     private JTextArea textArea;
 
-    public ApplicationFrame(){
+    public ApplicationFrame() {
 
         mainFrame = new JFrame();
         mainFrame.setTitle("Qiper v1.0 alpha");
