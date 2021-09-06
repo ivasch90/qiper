@@ -16,8 +16,8 @@ public class ClientHandler {
     private String name;
     private final Socket socket;
     private final int SEC_TIMEOUT = 120000;
-    TaskTimer Timeout = new TaskTimer();
-    Timer timer = new Timer();
+    private final TaskTimer Timeout = new TaskTimer();
+    private final Timer timer = new Timer();
 
 
     public ClientHandler(Server server, Socket socket) {
