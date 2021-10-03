@@ -1,12 +1,17 @@
 package com.qiper.server;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Optional;
 
 public class AuthService {
 
+    /*
     private static final List<Entry> entries;
+
 
     static {
         entries = List.of(
@@ -16,7 +21,35 @@ public class AuthService {
         );
     }
 
+    */
+
     public Optional<Entry> findUserByLoginAndPassword(String login, String password) {
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM users WHERE nick = ? AND password = ?");
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            return Optional.of(
+                    new Entry(
+                            resultSet.getString("name"),
+                            resultSet.getString("nick"),
+                            resultSet.getString("password")
+                    )
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DatabaseConnection.close(connection);
+        }
+
+
+
+
+
+
         /**
          for (AuthService.Entry entry : entries) {
          if (entry.login.equals(login) && entry.password.equals(password)) {
@@ -25,11 +58,33 @@ public class AuthService {
          }
 
          return Optional.empty();
-         */
+
+
 
         return entries.stream()
                 .filter(entry -> entry.login.equals(login) && entry.password.equals(password))
                 .findFirst();
+
+    }
+         */
+    }
+    // Task *
+    public boolean changeNick(Entry entry, String nickNew) {
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET nick = ? WHERE nick = ?");
+            statement.setString(1, nickNew);
+            statement.setString(2, entry.getLogin());
+            if (statement.execute()) {
+                statement.executeUpdate();
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DatabaseConnection.close(connection);
+        }
+        return false;
     }
 
     static class Entry {

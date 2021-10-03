@@ -82,7 +82,7 @@ public class ClientHandler {
 
     private void doAuthentication() throws IOException {
         sendMessage("Greeting you in the Outstanding Chat.");
-        sendMessage("Please do authentication in " + SEC_TIMEOUT/1000 + " sec!!!");
+        sendMessage("Please do authentication in " + SEC_TIMEOUT / 1000 + " sec!!!");
         sendMessage("Template is: -auth [login] [password]");
         timer.schedule(Timeout, SEC_TIMEOUT);
 
@@ -134,11 +134,26 @@ public class ClientHandler {
 
     public void listenMessages() throws IOException {
         while (true) {
+
             String inboundMessage = in.readUTF();
             if (inboundMessage.equals("-exit")) {
                 break;
             }
             server.broadcastMessage(inboundMessage);
+            // change nick "-N [nick] [pass] [new_nick]
+            if (inboundMessage.startsWith("-N")) {
+                String[] maybeChangeNick = inboundMessage.split("\\s");
+                String maybeNick = maybeChangeNick[3];
+                Optional<AuthService.Entry> maybeChangeEntry =
+                        server.getAuthService()
+                                .findUserByLoginAndPassword(maybeChangeNick[1], maybeChangeNick[2]);
+                if (maybeChangeEntry.isPresent()) {
+                    AuthService.Entry user = maybeChangeEntry.get();
+                    if (server.isUserOccupied(user.getName())) {
+                        server.getAuthService().changeNick(user, maybeNick);
+                    }
+                }
+            }
         }
     }
 
