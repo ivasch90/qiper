@@ -52,7 +52,6 @@ public class ChatFrame {
     private JPanel createTop() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
-
         chattingArea = new JTextArea();
         chattingArea.setEditable(false);
         jPanel.add(chattingArea, BorderLayout.CENTER);

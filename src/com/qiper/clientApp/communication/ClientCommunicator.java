@@ -1,7 +1,7 @@
 package com.qiper.clientApp.communication;
 
-
 import java.io.IOException;
+
 
 public class ClientCommunicator {
 
